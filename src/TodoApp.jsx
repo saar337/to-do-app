@@ -18,7 +18,7 @@ const TodoApp = () => {
     const [selectedSubject, setSelectedSubject] = useState(() => { return localStorage.getItem("selectedSubject") ?? "all";});
     const [isAddTodoOpen, setIsAddTodoOpen] = useState(false);
     const handleDelete = (id) => {setTodos(todos.filter((todo) => todo.id !== id));};
-    const handleAdd = (newTodo) => {setTodos([...todos, {id: Date.now(), text: newTodo.text, description: newTodo.description, completed: false, subjectId: String(newTodo.subjectId), urgency: "low"}]);};
+    const handleAdd = (newTodo) => {setTodos([...todos, {id: Date.now(), text: newTodo.text, description: newTodo.description, completed: false, subjectId: String(newTodo.subjectId), urgency: newTodo.urgency}]);};
     const handleAddSubject = () => {
         if (subject.trim() === "") return;
         setSubjects([...subjects, {id: String(Date.now()), name: subject}]);
@@ -32,6 +32,11 @@ const TodoApp = () => {
         if (filter === "active") return !todo.completed;
         if (filter === "completed") return todo.completed;
         return true;});
+    const updateUrgency = (id, urgency) => {
+    setTodos(
+    todos.map((todo) =>
+      todo.id === id ? { ...todo, urgency } : todo
+    ));};
 
     useEffect(() => {localStorage.setItem("todos", JSON.stringify(todos));}, [todos]);
     useEffect(() => {localStorage.setItem("subjects", JSON.stringify(subjects));}, [subjects]);
@@ -84,6 +89,7 @@ return (
             todos={filteredTodos}
             onDelete={handleDelete}
             onToggle={toggleTodo}
+            onUpdateUrgency={updateUrgency}
             />
         </div>
 

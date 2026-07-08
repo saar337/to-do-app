@@ -4,13 +4,15 @@ const AddToDo = ({onAdd,onClose,subjects}) => {
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("all");
+  const [urgency, setUrgency] = useState("low");
 
   const handleSubmit = () => {
     if (taskName.trim() === "") return;
-    onAdd({text: taskName, description, subjectId: selectedSubject});
+    onAdd({text: taskName, description, subjectId: selectedSubject, urgency});
     setTaskName("");
     setDescription("");
     setSelectedSubject("all");
+    setUrgency("low");
     onClose();};
 
   return (
@@ -39,7 +41,20 @@ const AddToDo = ({onAdd,onClose,subjects}) => {
             {subject.name}
           </option>
         ))}
-      </select>
+        </select>
+
+        <div style={{ marginTop: "10px" }}>
+          <label>urgency</label>
+
+          <select
+            value={urgency}
+            onChange={(e) => setUrgency(e.target.value)}
+          >
+            <option value="low">🟢 low</option>
+            <option value="medium">🟠 medium</option>
+            <option value="high">🔴 high</option>
+          </select>
+        </div>
 
       <button onClick={handleSubmit}>
         שמור
